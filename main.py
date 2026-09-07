@@ -68,7 +68,7 @@ async def recipes_sorted(db: AsyncSession = Depends(get_db)) -> List[models.Reci
         }
     },
 )
-async def recipes_sorted(
+async def recipes_by_id(
     recipe_id: int, db: AsyncSession = Depends(get_db)
 ) -> models.Recipe:
     res = await db.execute(select(models.Recipe).where(recipe_id == models.Recipe.id))
