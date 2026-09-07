@@ -71,7 +71,8 @@ async def recipes_sorted(db: AsyncSession = Depends(get_db)) -> Any:
 async def recipes_by_id(
     recipe_id: int, db: AsyncSession = Depends(get_db)
 ) -> models.Recipe:
-    res = await db.execute(select(models.Recipe).where(recipe_id == models.Recipe.id))
+    res = await db.execute(select(models.Recipe).where(models.Recipe.id.is_(recipe_id)))
+
     target_recipe = res.scalars().one_or_none()
     if target_recipe is None:
         raise HTTPException(
