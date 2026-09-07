@@ -1,12 +1,10 @@
-from contextlib import asynccontextmanager
-from http.client import HTTPException
 from typing import List
-
 from fastapi import Depends, FastAPI, status
 from sqlalchemy import desc
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-
+from contextlib import asynccontextmanager
+from http.client import HTTPException
 import models
 import schemas
 from database import async_session, engine
