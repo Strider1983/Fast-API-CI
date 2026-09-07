@@ -1,5 +1,5 @@
 from contextlib import asynccontextmanager
-from typing import List
+from typing import List, Any
 
 from fastapi import Depends, FastAPI, HTTPException, status
 from sqlalchemy import desc
@@ -49,7 +49,7 @@ async def recipes(
     description="Get all recipes from database "
     "sorted first by views, than by cooking time",
 )
-async def recipes_sorted(db: AsyncSession = Depends(get_db)) -> List[models.Recipe]:
+async def recipes_sorted(db: AsyncSession = Depends(get_db)) -> Any:
     query = select(
         models.Recipe.dish_name, models.Recipe.views, models.Recipe.cook_time
     ).order_by(desc(models.Recipe.views), models.Recipe.cook_time)
