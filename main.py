@@ -49,7 +49,7 @@ async def recipes(
     description="Get all recipes from database "
     "sorted first by views, than by cooking time",
 )
-async def recipes(db: AsyncSession = Depends(get_db)) -> List[models.Recipe]:
+async def recipes_sorted(db: AsyncSession = Depends(get_db)) -> List[models.Recipe]:
     query = select(
         models.Recipe.dish_name, models.Recipe.views, models.Recipe.cook_time
     ).order_by(desc(models.Recipe.views), models.Recipe.cook_time)
@@ -68,7 +68,7 @@ async def recipes(db: AsyncSession = Depends(get_db)) -> List[models.Recipe]:
         }
     },
 )
-async def recipes(recipe_id: int, db: AsyncSession = Depends(get_db)) -> models.Recipe:
+async def recipes_sorted(recipe_id: int, db: AsyncSession = Depends(get_db)) -> models.Recipe:
     res = await db.execute(select(models.Recipe).where(recipe_id == models.Recipe.id))
     target_recipe = res.scalars().one_or_none()
     if target_recipe is None:
