@@ -73,7 +73,7 @@ async def test_post_recipe(client, test_db):
         "ingredients": "Eggs, milk, butter, salt",
         "description": "Beat eggs with milk, pour into a pan with butter and fry.",
     }
-    response = await client.post(f"/recipes/", json=valid_recipe_data)
+    response = await client.post("/recipes/", json=valid_recipe_data)
 
     assert response.status_code == 200
 

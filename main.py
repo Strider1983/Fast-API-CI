@@ -1,8 +1,7 @@
 from contextlib import asynccontextmanager
 from http.client import HTTPException
 from typing import List
-
-from fastapi import Depends, FastAPI, HTTPException, status
+from fastapi import Depends, FastAPI, status
 from sqlalchemy import desc
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
@@ -47,7 +46,8 @@ async def recipes(
 @app.get(
     "/recipes/",
     response_model=List[schemas.RecipeListOut],
-    description="Get all recipes from database sorted first by views, than by cooking time",
+    description="Get all recipes from database "
+                "sorted first by views, than by cooking time",
 )
 async def recipes(db: AsyncSession = Depends(get_db)) -> List[models.Recipe]:
     query = select(
