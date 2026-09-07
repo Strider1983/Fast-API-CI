@@ -18,7 +18,8 @@ class BaseRecipe(BaseModel):
     )
 
 
-class RecipeIn(BaseRecipe): ...
+class RecipeIn(BaseRecipe):
+    pass
 
 
 class RecipeOut(BaseRecipe):
