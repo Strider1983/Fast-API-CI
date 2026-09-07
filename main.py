@@ -17,6 +17,7 @@ async def lifespan(app: FastAPI):
 
     yield
 
+
 app = FastAPI(lifespan=lifespan)
 
 
@@ -26,11 +27,13 @@ async def get_db():
 
 
 @app.post(
-    '/recipes/',
+    "/recipes/",
     response_model=schemas.RecipeOut,
-    description='Add new recipe to database'
+    description="Add new recipe to database",
 )
-async def recipes(book: schemas.RecipeIn, db: AsyncSession = Depends(get_db)) -> models.Recipe:
+async def recipes(
+    book: schemas.RecipeIn, db: AsyncSession = Depends(get_db)
+) -> models.Recipe:
     new_recipe = models.Recipe(**book.model_dump())
     db.add(new_recipe)
     await db.commit()
@@ -40,31 +43,28 @@ async def recipes(book: schemas.RecipeIn, db: AsyncSession = Depends(get_db)) ->
 
 
 @app.get(
-    '/recipes/',
+    "/recipes/",
     response_model=List[schemas.RecipeListOut],
-    description='Get all recipes from database sorted first by views, than by cooking time'
+    description="Get all recipes from database sorted first by views, than by cooking time",
 )
 async def recipes(db: AsyncSession = Depends(get_db)) -> List[models.Recipe]:
     query = select(
-        models.Recipe.dish_name,
-        models.Recipe.views,
-        models.Recipe.cook_time
+        models.Recipe.dish_name, models.Recipe.views, models.Recipe.cook_time
     ).order_by(desc(models.Recipe.views), models.Recipe.cook_time)
     res = await db.execute(query)
     return res.mappings().all()
 
 
 @app.get(
-    '/recipes/{recipe_id}',
+    "/recipes/{recipe_id}",
     response_model=schemas.RecipeOut,
-    description='Get recipe by id',
+    description="Get recipe by id",
     responses={
         status.HTTP_404_NOT_FOUND: {
-            'model': schemas.NotFoundResponse,
-            'description': 'Recipe with specified id is missing in database'
+            "model": schemas.NotFoundResponse,
+            "description": "Recipe with specified id is missing in database",
         }
-    }
-
+    },
 )
 async def recipes(recipe_id: int, db: AsyncSession = Depends(get_db)) -> models.Recipe:
     res = await db.execute(select(models.Recipe).where(recipe_id == models.Recipe.id))
@@ -72,12 +72,10 @@ async def recipes(recipe_id: int, db: AsyncSession = Depends(get_db)) -> models.
     if target_recipe is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=f'Recipe with id {recipe_id} not found'
+            detail=f"Recipe with id {recipe_id} not found",
         )
     target_recipe.views += 1
     await db.commit()
     await db.refresh(target_recipe)
 
     return target_recipe
-
-

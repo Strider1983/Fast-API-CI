@@ -3,8 +3,9 @@ from sqlalchemy.orm import Mapped, mapped_column
 
 from database import Base
 
+
 class Recipe(Base):
-    __tablename__ = 'recipe'
+    __tablename__ = "recipe"
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
     dish_name: Mapped[str]
