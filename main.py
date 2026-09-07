@@ -47,7 +47,7 @@ async def recipes(
     "/recipes/",
     response_model=List[schemas.RecipeListOut],
     description="Get all recipes from database "
-                "sorted first by views, than by cooking time",
+    "sorted first by views, than by cooking time",
 )
 async def recipes(db: AsyncSession = Depends(get_db)) -> List[models.Recipe]:
     query = select(
